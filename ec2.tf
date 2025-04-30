@@ -59,19 +59,23 @@ resource aws_security_group my_security_group{
 #ec2 instance
 
 resource "aws_instance" "my_instance" {
+    for_each = tomap({
+        terrafrom-automate-1 = "t2.micro"
+    }) #Metadata
+    depends_on = [ aws_security_group.my_security_group, aws_key_pair.my_key ]
     key_name = aws_key_pair.my_key.key_name
     security_groups = [aws_security_group.my_security_group.name]
-    instance_type = var.aws_instance_type
+    instance_type = each.value
     ami = var.ec2_ami_id
     user_data = file("install_nginx.sh")
 
     root_block_device {
-      volume_size = var.aws_root_storage_size
+      volume_size = var.env == "prod" ? 15 : var.aws_root_default_storage_size
       volume_type = "gp3"
     }
 
     tags = {
-        Name = "Terra-automate"
+        Name = each.key
     }
   
 }

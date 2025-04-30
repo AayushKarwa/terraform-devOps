@@ -3,8 +3,8 @@ variable "aws_instance_type" {
     type = string
 }
 
-variable "aws_root_storage_size" {
-    default = 15
+variable "aws_root_default_storage_size" {
+    default = 10
     type = number
   
 }
@@ -13,4 +13,9 @@ variable "ec2_ami_id" {
     default = "ami-04f167a56786e4b09"
     type = string
   
+}
+
+variable "env" {
+  default = "dev"
+  type = string
 }
